@@ -19,3 +19,7 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/p2p-lending-logs
+
+  p2p-lending:
+    jwt-secret: k3lM3J1Q4oP7hT9sZ2xV6bN8cF5dG1jK3mO5qR7tU9wX2zB4vC6yH8nJ0pL2sD4f
+    jwt-expiration-ms: 86400000

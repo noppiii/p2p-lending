@@ -1,11 +1,11 @@
 # P2P Lending Platform
 
-## Deskripsi
+## Description
 Platform P2P Lending adalah sebuah layanan yang dikembangkan menggunakan Spring Boot, dirancang untuk memfasilitasi pinjaman *peer-to-peer* dengan memungkinkan pengguna untuk berperan sebagai peminjam maupun pemberi pinjaman. Pengguna dapat membuat permintaan pinjaman dengan jumlah, jangka waktu, dan tingkat bunga tertentu. Peminjam dapat mengajukan permintaan pendanaan, sementara pemberi pinjaman dapat menjelajahi, memfilter, dan memilih pinjaman untuk diinvestasikan. Setiap perjanjian pinjaman diproses sebagai transaksi, sistem secara otomatis menghitung jadwal pembayaran, serta memberi notifikasi kepada peminjam tentang pembayaran yang akan datang. Platform ini menyediakan laporan kepada pemberi pinjaman dan peminjam tentang status pinjaman dan penghasilan mereka, menjadikan proses pinjaman transparan dan aman.
 
-## Teknologi
+## Technology
 - **Spring Boot**: Framework untuk membuat dan mengelola RESTful API.
-- **Spring Security & JWT**: Untuk autentikasi dan otorisasi pengguna secara aman, mendukung kontrol akses berbasis peran.
+- **Spring Security & JWT**: Untuk autentikasi dan otorisasi pengguna.
 - **Hibernate/JPA**: Untuk pemetaan objek-relasional dan interaksi dengan database relasional.
 - **Lombok**: Library untuk mengurangi kode boilerplate.
 - **MongoDB**: Digunakan untuk pencatatan log asinkron, menyimpan log aplikasi secara rinci dalam database NoSQL.
@@ -21,7 +21,7 @@ Platform P2P Lending adalah sebuah layanan yang dikembangkan menggunakan Spring 
 8. **Pencatatan Log Asinkron**: Pencatatan log peristiwa aplikasi dan kesalahan secara rinci yang disimpan di MongoDB untuk audit dan debugging.
 9. **Laporan**: Penyediaan laporan kepada pemberi pinjaman dan peminjam tentang status pinjaman dan penghasilan.
 
-## Dokumentasi Endpoint API
+## Documentation Endpoint API
 
 ### 1. **Authentication API**
 | Method | HTTP Request              | Deskripsi                              |

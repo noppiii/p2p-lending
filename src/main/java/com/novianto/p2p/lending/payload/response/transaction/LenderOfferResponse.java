@@ -1,52 +1,34 @@
-package com.novianto.p2p.lending.model;
+package com.novianto.p2p.lending.payload.response.transaction;
 
 import com.novianto.p2p.lending.model.enumType.OfferStatus;
-import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Entity
-@Table(name = "lender_offers")
-public class LendingOffer implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class LenderOfferResponse {
     private Long id;
-
-    @ManyToOne
-    @JoinColumn(name = "lender_id", nullable = false)
-    private User lender;
-
-    @Column(name = "amount", nullable = false)
     private BigDecimal amount;
-
-    @Column(name = "interest_rate", nullable = false)
     private Double interestRate;
-
-    @Column(name = "term_in_months", nullable = false)
     private Integer termInMonths;
+    private OfferStatus status;
+    private LocalDateTime createdAt;
+    private Long lenderId;
+    private String lenderNickname;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @Column(name = "status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private OfferStatus status = OfferStatus.ACTIVE;
-
-    public LendingOffer() {
+    public LenderOfferResponse() {
     }
 
-    public LendingOffer(Long id, User lender, BigDecimal amount, Double interestRate, Integer termInMonths,
-                        LocalDateTime createdAt, OfferStatus status) {
+    public LenderOfferResponse(Long id, BigDecimal amount, Double interestRate, Integer termInMonths,
+                               OfferStatus status, LocalDateTime createdAt, Long lenderId, String lenderNickname) {
         this.id = id;
-        this.lender = lender;
         this.amount = amount;
         this.interestRate = interestRate;
         this.termInMonths = termInMonths;
-        this.createdAt = createdAt;
         this.status = status;
+        this.createdAt = createdAt;
+        this.lenderId = lenderId;
+        this.lenderNickname = lenderNickname;
     }
 
     public Long getId() {
@@ -55,14 +37,6 @@ public class LendingOffer implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public User getLender() {
-        return lender;
-    }
-
-    public void setLender(User lender) {
-        this.lender = lender;
     }
 
     public BigDecimal getAmount() {
@@ -89,14 +63,6 @@ public class LendingOffer implements Serializable {
         this.termInMonths = termInMonths;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public OfferStatus getStatus() {
         return status;
     }
@@ -105,22 +71,46 @@ public class LendingOffer implements Serializable {
         this.status = status;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Long getLenderId() {
+        return lenderId;
+    }
+
+    public void setLenderId(Long lenderId) {
+        this.lenderId = lenderId;
+    }
+
+    public String getLenderNickname() {
+        return lenderNickname;
+    }
+
+    public void setLenderNickname(String lenderNickname) {
+        this.lenderNickname = lenderNickname;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder {
         private Long id;
-        private User lender;
         private BigDecimal amount;
         private Double interestRate;
         private Integer termInMonths;
-        private LocalDateTime createdAt;
         private OfferStatus status;
+        private LocalDateTime createdAt;
+        private Long lenderId;
+        private String lenderNickname;
 
         public Builder id(Long id) {
             this.id = id;
-            return this;
-        }
-
-        public Builder lender(User lender) {
-            this.lender = lender;
             return this;
         }
 
@@ -139,35 +129,42 @@ public class LendingOffer implements Serializable {
             return this;
         }
 
-        public Builder createdAt(LocalDateTime createdAt) {
-            this.createdAt = createdAt;
-            return this;
-        }
-
         public Builder status(OfferStatus status) {
             this.status = status;
             return this;
         }
 
-        public LendingOffer build() {
-            return new LendingOffer(id, lender, amount, interestRate, termInMonths, createdAt, status);
+        public Builder createdAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+            return this;
         }
-    }
 
-    public static Builder builder() {
-        return new Builder();
+        public Builder lenderId(Long lenderId) {
+            this.lenderId = lenderId;
+            return this;
+        }
+
+        public Builder lenderNickname(String lenderNickname) {
+            this.lenderNickname = lenderNickname;
+            return this;
+        }
+
+        public LenderOfferResponse build() {
+            return new LenderOfferResponse(id, amount, interestRate, termInMonths, status, createdAt, lenderId, lenderNickname);
+        }
     }
 
     @Override
     public String toString() {
-        return "LendingOffer{" +
+        return "LenderOfferResponse{" +
                 "id=" + id +
-                ", lender=" + lender +
                 ", amount=" + amount +
                 ", interestRate=" + interestRate +
                 ", termInMonths=" + termInMonths +
-                ", createdAt=" + createdAt +
                 ", status=" + status +
+                ", createdAt=" + createdAt +
+                ", lenderId=" + lenderId +
+                ", lenderNickname='" + lenderNickname + '\'' +
                 '}';
     }
 }

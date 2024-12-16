@@ -11,7 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -62,5 +64,24 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(user);
         logService.log("INFO", "UserService", "Pengguna baru terdaftar: " + savedUser.getNickname(), Thread.currentThread().getName());
         return savedUser;
+    }
+
+    @Override
+    public Optional<User> findByNickname(String nickname) {
+        Optional<User> userOpt = userRepository.findByNickname(nickname);
+        if (userOpt.isPresent()) {
+            logService.log("INFO", "UserService", "Pengguna ditemukan: " + nickname, Thread.currentThread().getName());
+        } else {
+            logService.log("WARN", "UserService", "Pengguna tidak ditemukan: " + nickname, Thread.currentThread().getName());
+        }
+        return userOpt;
+    }
+
+    @Override
+    public void updateUserBalance(User user, BigDecimal amount) {
+        user.setBalance(user.getBalance().add(amount));
+        userRepository.save(user);
+
+        logService.log("INFO", "UserService", "Saldo pengguna " + user.getNickname() + " diperbarui pada " + amount, Thread.currentThread().getName());
     }
 }

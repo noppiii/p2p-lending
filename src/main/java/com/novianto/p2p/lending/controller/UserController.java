@@ -12,10 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -26,7 +23,7 @@ public class UserController {
 
     @Operation(summary = "Top up saldo user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Balance topped up successfully",
+            @ApiResponse(responseCode = "200", description = "Top up saldo berjasil dilakukan",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input data",
@@ -41,5 +38,22 @@ public class UserController {
                 .orElseThrow(() -> new RuntimeException("User tidak ditemukan"));
         userService.updateUserBalance(user, balanceRequest.getAmount());
         return ResponseEntity.ok("Top up berhasil sebesar:" + balanceRequest.getAmount());
+    }
+
+    @Operation(summary = "Get saldo user saat ini")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Current balance retrieved",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                    content = @Content)
+    })
+    @GetMapping("/balance")
+    public ResponseEntity<?> getBalance(Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        User user = userService.findByNickname(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("User tidak ditemukan"));
+
+        return ResponseEntity.ok("Saldo Anda saat ini: " + user.getBalance());
     }
 }

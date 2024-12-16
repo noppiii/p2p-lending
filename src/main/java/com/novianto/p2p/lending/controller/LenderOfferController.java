@@ -8,6 +8,7 @@ import com.novianto.p2p.lending.security.CustomUserDetails;
 import com.novianto.p2p.lending.service.auth.UserService;
 import com.novianto.p2p.lending.service.transaction.LenderOfferService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,10 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/lender/offer")
@@ -51,6 +52,26 @@ public class LenderOfferController {
 
         LendingOffer offer = lenderOfferService.createLenderOffer(lender, offerRequest);
         return ResponseEntity.ok(convertToResponse(offer));
+    }
+
+    @Operation(summary = "Dapatkan semua penawaran pemberi pinjaman aktif")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Daftar penawaran pemberi pinjaman aktif",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = LenderOfferResponse.class)))),
+            @ApiResponse(responseCode = "204", description = "Tidak ada penawaran aktif yang ditemukan",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized access",
+                    content = @Content)
+    })
+    @GetMapping("/active")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> getActiveLenderOffers() {
+        List<LendingOffer> offers = lenderOfferService.getActiveLenderOffers();
+        List<LenderOfferResponse> responses = offers.stream()
+                .map(this::convertToResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responses);
     }
 
     private LenderOfferResponse convertToResponse(LendingOffer offer) {

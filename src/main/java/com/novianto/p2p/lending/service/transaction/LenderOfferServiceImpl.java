@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class LenderOfferServiceImpl implements LenderOfferService {
@@ -39,5 +40,12 @@ public class LenderOfferServiceImpl implements LenderOfferService {
         logService.log("INFO", "LenderOfferService", "Penawaran baru dibuat: ID=" + savedOffer.getId() + " dari Pendarat=" + lender.getNickname(), Thread.currentThread().getName());
 
         return savedOffer;
+    }
+
+    @Override
+    public List<LendingOffer> getActiveLenderOffers() {
+        List<LendingOffer> activeOffers = lenderOfferRepository.findByStatus(OfferStatus.ACTIVE);
+        logService.log("INFO", "LenderOfferService", "Diterima " + activeOffers.size() + " penawaran aktif dari pendarat.", Thread.currentThread().getName());
+        return activeOffers;
     }
 }
